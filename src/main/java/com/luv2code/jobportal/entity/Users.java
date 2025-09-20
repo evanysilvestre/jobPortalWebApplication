@@ -1,5 +1,6 @@
 package com.luv2code.jobportal.entity;
-
+/*
+ Entity → represents your database tables (part of the Model).*/
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -120,11 +121,5 @@ public class Users {
 				", registrationDate=" + registrationDate + 
 				", userTypeId=" + userTypeId + "]";
 	}
-	
-	
-	
-	
-	
-	
 
 }

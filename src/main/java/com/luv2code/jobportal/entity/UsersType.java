@@ -1,5 +1,7 @@
 package com.luv2code.jobportal.entity;
-
+/*
+ Entity → represents your database tables (part of the Model).
+ */
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -18,23 +20,18 @@ public class UsersType {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userTypeId;
 	
-	private String userTypeName;
+	private String userTypeName; //Recruiter or Jobseeker
 	
 	@OneToMany(targetEntity = Users.class, mappedBy = "userTypeId", cascade = CascadeType.ALL)
 	private List<Users> users;
+	/*if you have a UsersType with userTypeName = "Recruiter", the users list will hold all users who are recruiters.*/
 
-	/**
-	 * 
-	 */
+	//Empty Constructor
 	public UsersType() {
-		super();
-	}
 
-	/**
-	 * @param userTypeId
-	 * @param userTypeName
-	 * @param users
-	 */
+	}
+	
+	//Constructor with arguments
 	public UsersType(int userTypeId, String userTypeName, List<Users> users) {
 		super();
 		this.userTypeId = userTypeId;
