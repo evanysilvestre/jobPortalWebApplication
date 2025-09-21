@@ -2,7 +2,7 @@ package com.luv2code.jobportal.entity;
 
 import java.util.List;
 
-import org.hibernate.annotations.CascadeType;
+import jakarta.persistence.CascadeType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,8 +35,9 @@ public class JobSeekerProfile {
 	
 	@Column(nullable = true, length = 64)
 	private String profilePhoto;
+	
 	@OneToMany(targetEntity = Skills.class, cascade = CascadeType.ALL, mappedBy = "jobSeekerProfile")
-	private List<Skills> skills;
+    private List<Skills> skills;
 
 	public JobSeekerProfile() {
 		super();
