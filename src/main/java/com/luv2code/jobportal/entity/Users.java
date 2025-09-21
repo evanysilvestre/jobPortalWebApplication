@@ -22,7 +22,7 @@ public class Users {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int Id;
+	private int userId;
 	
 	@Column(unique = true)
 	private String email;
@@ -39,24 +39,13 @@ public class Users {
 	@JoinColumn(name = "userTypeId", referencedColumnName = "userTypeId")
 	private UsersType userTypeId;
 
-	/**
-	 * 
-	 */
+
 	public Users() {
 	}
 
-	/**
-	 * @param id
-	 * @param email
-	 * @param password
-	 * @param isActive
-	 * @param registrationDate
-	 * @param userTypeId
-	 */
-	public Users(int id, String email, @NotEmpty String password, boolean isActive, Date registrationDate,
+	public Users(int userId, String email, @NotEmpty String password, boolean isActive, Date registrationDate,
 			UsersType userTypeId) {
-		super();
-		Id = id;
+		this.userId= userId;
 		this.email = email;
 		this.password = password;
 		this.isActive = isActive;
@@ -64,12 +53,12 @@ public class Users {
 		this.userTypeId = userTypeId;
 	}
 
-	public int getId() {
-		return Id;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setId(int id) {
-		Id = id;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public String getEmail() {
@@ -114,7 +103,7 @@ public class Users {
 
 	@Override
 	public String toString() {
-		return "Users [Id=" + Id + 
+		return "Users [Id=" + userId + 
 				", "+ "email=" + email +
 				", password=" + password + 
 				", isActive=" + isActive+ 
