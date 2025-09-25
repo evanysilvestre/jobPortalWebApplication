@@ -1,5 +1,7 @@
 package com.luv2code.jobportal.config;
 
+import java.beans.Customizer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,15 +17,14 @@ import com.luv2code.jobportal.services.CustomUserDetailsService;
 @Configuration
 public class WebSecurityConfig {
 
-    private final AuthenticationProvider authenticationProvider;
-    
     private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    
     
     @Autowired
-	public WebSecurityConfig(AuthenticationProvider authenticationProvider,
-			CustomUserDetailsService customUserDetailsService) {
-		this.authenticationProvider = authenticationProvider;
+	public WebSecurityConfig(CustomUserDetailsService customUserDetailsService, CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler) {
 		this.customUserDetailsService = customUserDetailsService;
+		this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
 	}
 
 	private final String[] publicUrl = {"/",
@@ -52,12 +53,22 @@ public class WebSecurityConfig {
 			auth.requestMatchers(publicUrl).permitAll();
 			auth.anyRequest().authenticated();
 		});
+		
+		http.formLogin(form->form.loginPage("/login").permitAll()
+                .successHandler(customAuthenticationSuccessHandler))
+                .logout(logout-> {
+                    logout.logoutUrl("/logout");
+                    logout.logoutSuccessUrl("/");
+                }).cors(Customizer.withDefaults())
+                .csrf(csrf->csrf.disable());
+		
 		return http.build();
 	}
 	
 	/*We use this to tell spring security how to find our users and also how to authenticate the passwords for the users.*/
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
+		
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
 		authenticationProvider.setUserDetailsService(customUserDetailsService);
