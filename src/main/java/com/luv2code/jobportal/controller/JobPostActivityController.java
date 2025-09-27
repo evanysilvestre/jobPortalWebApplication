@@ -1,23 +1,25 @@
 package com.luv2code.jobportal.controller;
 
+import com.luv2code.jobportal.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.luv2code.jobportal.services.UsersService;
+@Controller
+public class JobPostActivityController {
 
-@Controller class JobPostActivityController {
-	
-	private final UsersService usersService;
-	
-	@Autowired
-	public JobPostActivityController(UsersService usersService) {
-		super();
-		this.usersService = usersService;
-	}
-	
-	@GetMapping("/dashboard")
+    private final UsersService usersService;
+
+    @Autowired
+    public JobPostActivityController(UsersService usersService) {
+        this.usersService = usersService;
+    }
+
+    @GetMapping("/dashboard/")
     public String searchJobs(Model model) {
 
         Object currentUserProfile = usersService.getCurrentUserProfile();
@@ -32,6 +34,4 @@ import com.luv2code.jobportal.services.UsersService;
 
         return "dashboard";
     }
-	
-	
 }
