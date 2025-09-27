@@ -3,8 +3,13 @@ package com.luv2code.jobportal.services;
 import java.util.Date;
 import java.util.Optional;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 import com.luv2code.jobportal.entity.JobSeekerProfile;
@@ -52,4 +57,25 @@ public class UsersService {
 	public Optional<Users> getUserByEmail(String email) {
 		return usersRepository.findByEmail(email);
 	}
+
+	public Object getCurrentUserProfile() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String username = authentication.getName();
+            Users users = usersRepository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("Could not found " + "user"));
+            int userId = users.getUserId();
+            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Recruiter"))) {
+                RecruiterProfile recruiterProfile = recruiterProfileRepository.findById(userId).orElse(new RecruiterProfile());
+                return recruiterProfile;
+            } else {
+                JobSeekerProfile jobSeekerProfile = jobSeekerProfileRepository.findById(userId).orElse(new JobSeekerProfile());
+                return jobSeekerProfile;
+            }
+        }
+
+        return null;
+    }
+
 }
